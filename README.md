@@ -1,6 +1,6 @@
 # Algorithms And Me
 
-Implementation of some random Algorithms in Haskell, primarily for ny own understanding and improvement of the Haskell language and Mathematics. As the time goes Ι will include many algorithms. 
+Implementation of some random Algorithms in Haskell, primarily for ny own understanding and improvement of the Haskell language and Mathematics. As the time goes Ι will include many algorithms. At present each algorithm has the mathematical description and the approach followed in the comments section in a detailed way.
 
 ## Algorithms
 * Coin Change problem (Not DP)
@@ -16,7 +16,8 @@ main
 ```
 
 ## TODO
-Need to implement several other languages and cover some test cases.
+Need to implement several other algorithms.
+Need to write some test cases.
 
 ### Links referred:
  * [The Excellent LYAH](http://learnyouahaskell.com) This is the book which got me into Haskell
