@@ -12,14 +12,18 @@
 ---------------------------------------------------------------------------------------
 module Algorithms1
 (
-uglynum
+uglynum,
+nthUgly
 )
 where
 
-
+import qualified Data.Word as W
 ---------------------------------------------------------------------------------------
+--
+-- Number Puzzle
+--
 {--|
-                            Number Puzzle
+                            Solution Approach 1
 
         Find the 1500ₜₕ number  which contains factor 2, 3 or  5.  The first 3
         numbers are obviously 2, 3 and 5.   For example, the 25ₜₕ number is 60
@@ -76,11 +80,9 @@ where
                      {x₁, X′ ∪ Y'} : x₁ = y₁
                      {y₁, X ∪ Y'}  : x₁ ≻ y₁
 
+      The Time complexity is O(n)
+      Taking advantage of the infinite lazy evaluation of Haskell
 --}
-
--- Solution approach - 1
--- The Time complexity is O(n)
--- Taking advantage of the infinite lazy evaluation of Haskell
 
 merge :: (Ord a) => [a] -> [a] -> [a]
 merge [] ys = ys
@@ -104,39 +106,84 @@ uglynum n = ns !! (n - 1)
 ---------------------------------------------------------------------------------------
 
 {--|
-                Approach 2
+                                Solution Approach 2
 
-The above  approach although is  fast produces many  duplicate numbers
-and they are finally dropped while  examining the Queue. Also it scans
-the whole queue  linearly giving a Time complexity  of O(|Queue|). The
-alternate approach to  implementing the above solution  using 3 Queues
-instead of a single Queue.
+       The above  approach although is  fast produces many  duplicate numbers
+       and they are finally dropped while  examining the Queue. Also it scans
+       the whole queue  linearly giving a Time complexity  of O(|Queue|). The
+       alternate approach to  implementing the above solution  using 3 Queues
+       instead of a single Queue.
 
-Three Queue can be initialized as follows
+       Three Queue can be initialized as follows
 
-Q₂ = {2}
-Q₃ = {3}
-Q₅ = {5}
+       Q₂ = {2}
+       Q₃ = {3}
+       Q₅ = {5}
 
-Each  time a  smallest element  x from  the queues  Q₂, Q₃  and Q₅  is
-Dequeued or POPPED, the following tests can be performed.
+       Each  time a  smallest element  x from  the queues  Q₂, Q₃  and Q₅  is
+       Dequeued or POPPED, the following tests can be performed.
 
-① If x  comes from Q₂, then 2x,  3x and 5x will be  Enqueued or PUSHED
-back into the Queues Q₂, Q₃ and Q₅ respectively.
+       ① If x  comes from Q₂, then 2x,  3x and 5x will be  Enqueued or PUSHED
+       back into the Queues Q₂, Q₃ and Q₅ respectively.
 
-② If x  comes from Q₃, then only  3x will be Enqueued to Q₃  and 5x to
-Q₅. 2x need not ne Enqueue into Q₂ because 2x is already present in Q₃
+       ② If x  comes from Q₃, then only  3x will be Enqueued to Q₃  and 5x to
+       Q₅. 2x need not ne Enqueue into Q₂ because 2x is already present in Q₃
 
-③ If x comes from Q₅, then only  5x will Enqueued into Q₅. There is no
-need of Enqueing 2x and 3x into  Q₂ and Q₃ as they are already present
-in the Queues.
+       ③ If x comes from Q₅, then only  5x will Enqueued into Q₅. There is no
+       need of Enqueing 2x and 3x into  Q₂ and Q₃ as they are already present
+       in the Queues.
 
-Repeated Enqueing will be done untill the nₜₕ element is found
+       Repeated Enqueing will be done untill the nₜₕ element is found
 
+       The function for getting the first n numbers whose factors are 2, 3 or
+       5 can be representated mathematically as follows.
+
+       U(n) = f(n, { 1 }, { 2 }, { 3 }, { 5 })
+
+       where
+
+       f(n, X, Q₂, Q₃, Q₅) = X                              if n = 1
+                           = f(n-1, X ∪ {x}, Q'₂, Q'₃, Q'₅) otherwise
+                           x = minimum(Q₂₁, Q₃₁, Q₅₁)
+
+
+                        {Q₂₂, Q₂₃ ... } ∪ {2x}, Q₃ ∪ {3x}, Q₅ ∪ {5x} if x = Q₂₁
+       Q'₂, Q'₃, Q'₅ =  Q₂, {Q₃₂, Q₃₃ ...} ∪ {3x}, Q₅ ∪ {5x}         if x = Q₃₁
+                        Q₂, Q₃, {Q₅₂, Q₅₃ ...} ∪ {5x}                if x = Q₅₁
 --}
---
--- Solution Approach 2
---
+
+numbersList :: (Eq a, Num a, Num b, Ord b) => a -> [b] -> ([b], [b], [b]) -> [b]
+numbersList 1 xs _ = xs
+numbersList n xs (q2, q3, q5) = numbersList (n - 1) (xs ++ [y]) pushPopQueue
+                                where
+                                y = minimum (map head [q2, q3, q5])
+                                --pushPopQueue :: (Eq a, Num a) => a -> [a] -> [a] -> [a] -> ([a], [a], [a])
+                                pushPopQueue
+                                    -- if min value is from q2
+                                    | y == head q2 = (tail q2 ++ [y * 2], q3 ++ [y * 3], q5 ++ [y * 5])
+                                    -- if min value is from q3
+                                    | y == head q3 = (q2, tail q3 ++ [y * 3], q5 ++ [y * 5])
+                                    -- if min value is from q5
+                                    | otherwise = (q2, q3, tail q5 ++ [y * 5])
+
+
+nthUgly :: Int -> Integer
+nthUgly n = last $ numbersList n [1] ([2], [3], [5])
+
+-- Results Comparision
+-- Some unpromising results for case 2
+-- λ> nthUgly 1500
+-- 859963392
+-- (0.10 secs, 97,048,064 bytes)
+-- λ> uglynum 1500
+-- 859963392
+-- (0.01 secs, 2,602,992 bytes)
+-- λ> uglynum 15000
+-- 123695058124800000000
+-- (0.05 secs, 16,005,768 bytes)
+-- λ> nthUgly 15000
+-- 123695058124800000000
+-- (13.15 secs, 10,855,672,968 bytes)
 
 {--|
     Edit Distance between two strings
