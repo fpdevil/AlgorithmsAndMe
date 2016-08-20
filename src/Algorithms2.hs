@@ -21,7 +21,7 @@ where
 import qualified Data.List as L
 
 ---------------------------------------------------------------------------------------
-{--|
+{-|
    Coin Change Problem
    Coin Change is the problem of finding the number of ways of making changes
    for a particular amount of cents, η using a given set of denominations like
@@ -35,7 +35,7 @@ import qualified Data.List as L
    list [1 .. m]       = list of m given coins
    list [m]            = denomination of the mᵗʰ coin
    S(sum, list[1...m]) = S(sum, list[1...m-1]) + S(sum - list[m], list[1...m])
---}
+-}
 
 change :: [Int] -> Int -> [[Int]]
 change [] 0 = [[]]
@@ -52,7 +52,7 @@ change c@(coin : coins) value
 ---------------------------------------------------------------------------------------
 
 
-{--|
+{-|
 
  Smallest free Id
  Using divide and conquer
@@ -72,7 +72,7 @@ change c@(coin : coins) value
                     A' = { ∀ x ∈ A ∧ x ≤ m }
                     A'' = { ∀ x ∈ A ∧ x ≻ m }
 
---}
+-}
 
 minFree :: [Int] -> Int
 minFree xs = binSearch xs 0 (length xs - 1)

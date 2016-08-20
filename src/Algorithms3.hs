@@ -27,7 +27,7 @@
 module Algorithms3 where
 
 
-{--|
+{-|
    In Mathematical form the sequence of the Fibonacci numbers are
    represented by the following recurrence relation
    Fₙ = Fₙ₋₁ + Fₙ₋₂
@@ -87,7 +87,7 @@ module Algorithms3 where
 
    The algorithm takes O(1) space complexity
                        O(log n) Operations
---}
+-}
 
 -- Matrix Approach
 -- By the power of Matrices
@@ -141,7 +141,7 @@ fibsequence n = fmap fibonacci [0 .. n]
 -- λ> fibsequence 10
 -- [1,1,1,2,3,5,8,13,21,34,55]
 
-{--|
+{-|
    Fast Doubling Algorithm for Fibonacci series (Fastest)
 
    Asymptotic Complexity = O(log n)
@@ -184,7 +184,7 @@ fibsequence n = fmap fibonacci [0 .. n]
    The final equations useful for fast fibonacci calculation are
    f(2k+1) = {f(k)}² + {f(k+1)}²
    f(2k)   = f(k){2f(k+1) - f(k)}
---}
+-}
 
 fib :: Integer -> (Integer, Integer)
 fib 0 = (0, 1)

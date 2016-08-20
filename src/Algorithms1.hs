@@ -22,7 +22,7 @@ import qualified Data.Word as W
 --
 -- Number Puzzle
 --
-{--|
+{-|
                             Solution Approach 1
 
         Find the 1500ₜₕ number  which contains factor 2, 3 or  5.  The first 3
@@ -44,7 +44,7 @@ import qualified Data.Word as W
         be a Queue or a Pririty Queue without repetition (like a Set).
 
         The idea is  to Push 1 (2⁰.3⁰.5⁰)  as the only element  into the Queue
-        and in  each iteration and  element with  the lowest value  is Popped,
+        and in  each iteration  an  element with  the lowest value  is Popped,
         multiplied with 2, 3 and 5 to get  the next 3 elements. Push the 3 new
         elements back into the Queue in the  same order. If the new element is
         already present  in the Queue, that  element will be dropped.  The new
@@ -82,7 +82,7 @@ import qualified Data.Word as W
 
       The Time complexity is O(n)
       Taking advantage of the infinite lazy evaluation of Haskell
---}
+-}
 
 merge :: (Ord a) => [a] -> [a] -> [a]
 merge [] ys = ys
@@ -105,7 +105,7 @@ uglynum n = ns !! (n - 1)
 --
 ---------------------------------------------------------------------------------------
 
-{--|
+{-|
                                 Solution Approach 2
 
        The above  approach although is  fast produces many  duplicate numbers
@@ -150,7 +150,7 @@ uglynum n = ns !! (n - 1)
                         {Q₂₂, Q₂₃ ... } ∪ {2x}, Q₃ ∪ {3x}, Q₅ ∪ {5x} if x = Q₂₁
        Q'₂, Q'₃, Q'₅ =  Q₂, {Q₃₂, Q₃₃ ...} ∪ {3x}, Q₅ ∪ {5x}         if x = Q₃₁
                         Q₂, Q₃, {Q₅₂, Q₅₃ ...} ∪ {5x}                if x = Q₅₁
---}
+-}
 
 numbersList :: (Eq a, Num a, Num b, Ord b) => a -> [b] -> ([b], [b], [b]) -> [b]
 numbersList 1 xs _ = xs
@@ -185,7 +185,7 @@ nthUgly n = last $ numbersList n [1] ([2], [3], [5])
 -- 123695058124800000000
 -- (13.15 secs, 10,855,672,968 bytes)
 
-{--|
+{-|
     Edit Distance between two strings
 
         Shortest sequence  of simple  editing operations to  transform one
@@ -208,7 +208,7 @@ nthUgly n = last $ numbersList n [1] ([2], [3], [5])
     insert 'p'
     copy 's'
     finally - delete string "h"
---}
+-}
 
 -- define a data type for Edit
 data Edit = Change Char
